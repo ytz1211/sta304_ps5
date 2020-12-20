@@ -1,0 +1,134 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Reproduction of `Newspapers in Times of Low Advertising Revenues' by Charles Angelucci and Julia Cagé},
+  pdfauthor={Yitian Zhao},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{Reproduction of `Newspapers in Times of Low Advertising Revenues' by Charles Angelucci and Julia Cagé\thanks{Code and data are available here at: \url{https://github.com/ytz1211/sta304_ps5}}}
+\author{Yitian Zhao}
+\date{19 December 2020}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+With the rise of the internet and a shift in consumer behaviour headed towards digital platforms, the newspaper industry is worried about its ability to produce high-quality journalism with the decrease in advertising revenue.\\
+~\\
+\textbf{Keywords: }
+\end{abstract}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+Inspired by Charles Angelucci and Julia Cagé's ``Newspapers in Times of Low Advertising Revenues'', we are looking to recreate\ldots{}
+
+\hypertarget{data}{%
+\section{Data}\label{data}}
+
+The data we are using is the same data collected by Angelucci and Cagé which is a data set on national and local French newspapers taken from 1960 to 1974. This is newspaper data that they have gathered from various historical sources that is now compiled into a digital format.
+
+The information on prices, revenues, and circulation was collected from the French Ministry of Information's records
+in the National archives as they required newspapers to report annually their revenues and prices. It is here where the information on the unit price, subscription price (annual subscription price divided by number of issues within the year), advertising revenues, sales revenues, number of issues, and information on circulation of unit buyers and subscription buyers is found. Their data set consists of samples of 68 local daily newspaper companies and 12 national daily newspaper companies. These samples represent a large portion of the local newspaper industry and the entire national newspaper industry during that time period.
+
+Data on the journalists themselves was collected through ``Commission de la carte d'identité des journalistes professionnels'' (CCIJP) which is the organization that issues press cards to journalists. According to French regulations, media companies are not allowed to employ professional journalists without press cards for longer than 3 months. Journalists must also renew their press card annually. Data for this category was collected for 63/68 of the local newspapers and 11/12 of the national newspapers. Journalist information includes the number of journalists at a given newspaper company per year and their monthly salary. Data on journalists working for the French television and radio broadcasting agency (ORTF) was also collected for the years 1960, 1964-1971, and 1974. Similar to newspaper journalists, television journalists also require a press card to be employed.
+
+Advertising revenues are affected by changing advertising prices and/or changing advertising quantities. Data is collected for both of these factors as we hope to see the effects of both on revenue. According to Angelucci and Cagé, the main source for gathering information on advertising prices is the official list price per column inch of advertising space from ``Tarif Media,'' an annual publication that provides information regarding advertising rates. As rates differ depending on the page which an ad is placed, the single rate they decided to use is for front page ads only as they have the most observations for it. A disadvantage of this method is that the rates are frequently discounted so the actual transaction price is lower. To combat this, another source of measuring prices comes from taking the total advertising revenue to be divided by the newspaper circulation. The amount of ads per issue comes from copies available in the French National Library providing the total number of ads and proportion of ads in the newspaper.
+
+By investigating the newspapers' contents, Angelucci and Cagé were also able to determine the amount of space dedicated to news. Changes in the content were analyzed through in 37 of the local newspapers and all of the national newspapers in the sample. The share of hard news and soft news stories were computed in each annual March issue in the 3rd week from 1964 to 1972.
+
+Taking information from the Centre d'Etude des Supports de Publicité (CESP), Angelucci and Cagé were able to obtain data on readers' characteristics. The CESP is an organization comprised of the biggest advertising businesses and thye produce reports on newspaper readers every 5 years from 1957 to 1967 and yearly beginning 1968. Data on their survey responses is included for the years 1957, 1962, 1967-1970, 1972, and 1974.
+
+\hypertarget{model}{%
+\section{Model}\label{model}}
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begin{itemize}
+\item
+  R Core Team (2020). R: A language and environment for statistical computing. R, Foundation for Statistical Computing, Vienna, Austria. URL, \url{https://www.R-project.org/}.
+\item
+  Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, \url{https://doi.org/10.21105/joss.01686}
+\item
+  Hadley Wickham and Evan Miller (2020). haven: Import and Export `SPSS', `Stata' and `SAS' Files. R package
+  version 2.3.1. \url{https://CRAN.R-project.org/package=haven}
+\item
+  Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2020). dplyr: A Grammar of Data
+  Manipulation. R package version 1.0.2. \url{https://CRAN.R-project.org/package=dplyr}
+\item
+  H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+\item
+  Charles Angelucci and Julia Cagé (2019). Newspapers in Times of Low Advertising Revenues. URL, \url{https://doi.org/10.1257/mic.20170306}
+\end{itemize}
+
+\end{document}
