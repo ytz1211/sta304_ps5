@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 abstract: |
   | With the rise of the internet and a shift in consumer behaviour headed towards digital platforms, the newspaper industry is worried about its ability to produce high-quality journalism with the decrease in advertising revenue.
   |
-  | **Keywords: ** 
+  | **Keywords: newspaper advertising, advertising revenue, ordinary least squares regression, ** 
 thanks: "Code and data are available here at: https://github.com/ytz1211/sta304_ps5"
 
 output:
@@ -16,21 +16,80 @@ link-citations: yes
 ---
 
 ```{r setup, include=FALSE}
-library(tidyverse)
+library(here)
 library(haven)
-library(labelled)
+library(huxtable)
+library(scales)
+library(tidyverse)
+library(dplyr)
 # Read in datasets
-Micro_dataset <- to_factor(read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_dataset.dta"))
-Micro_Descriptive_evidence_advertisement <- to_factor(read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_advertisement.dta"))
-Micro_Descriptive_evidence_advertising_industry <- to_factor(read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_advertising_industry.dta"))
-Micro_Descriptive_evidence_television_quality <- to_factor(read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_television_quality.dta"))
-Micro_Descriptive_evidence_US <- to_factor(read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_US.dta"))
+Micro_dataset <- (read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_dataset.dta"))
+Micro_Descriptive_evidence_advertisement <- (read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_advertisement.dta"))
+Micro_Descriptive_evidence_advertising_industry <- (read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_advertising_industry.dta"))
+Micro_Descriptive_evidence_television_quality <- (read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_television_quality.dta"))
+Micro_Descriptive_evidence_US <- (read_dta("116438-V1/data/dta/Angelucci_Cage_AEJMicro_Descriptive_evidence_US.dta"))
 
 ```
 
 # Introduction
 
 Inspired by Charles Angelucci and Julia Cagé's "Newspapers in Times of Low Advertising Revenues", we are looking to recreate...
+
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{cccccc}}
+\hline\hline
+                    &\multicolumn{6}{c}{}                                                         \\
+                    &        Mean&      Median&          sd&         Min&         Max&         Obs\\
+\hline
+\textbf{Prices}     &            &            &            &            &            &            \\
+Unit buyer price    &         3.6&         3.5&         1.3&         2.4&         9.3&         152\\
+Subscription price per issue&         2.8&         2.7&         0.7&         1.9&         5.6&         148\\
+Display ad rate (listed price)&       121.1&       114.5&        81.0&        17.5&       274.2&         121\\
+\textbf{Revenues \& journalists}&            &            &            &            &            &            \\
+Total revenues (million \euro)&         425&         271&         403&          19&        1482&         162\\
+Revenues from advertising (million \euro)&         228&         103&         258&           7&         864&         161\\
+Revenues from sales (million \euro)&         199&         145&         181&          12&         657&         162\\
+Share of advertising in total revenues (\%)&        47.4&        51.1&        21.3&         8.0&        81.0&         162\\
+Number of journalists&         117&          85&          81&          21&         326&         158\\
+\textbf{Circulation}&            &            &            &            &            &            \\
+Total circulation   &     295,210&     181,574&     292,838&      16,112&   1,143,676&         162\\
+Share of subscribers (\%)&        25.6&        18.5&        26.3&         0.7&        92.3&         163\\
+\textbf{Content}    &            &            &            &            &            &            \\
+Number of pages     &          19&          17&           7&           8&          38&         138\\
+News hole (nonadvertising space)&          13&          13&           4&           6&          25&         138\\
+Advertising space   &           5&           4&           4&           0&          16&         138\\
+\hline\hline
+\end{tabular}
+}
+
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{cccccc}}
+\hline\hline
+                    &\multicolumn{6}{c}{}                                                         \\
+                    &        Mean&      Median&          sd&         Min&         Max&         Obs\\
+\hline
+\textbf{Prices}     &            &            &            &            &            &            \\
+Unit buyer price    &         3.2&         3.3&         0.8&         0.8&         5.7&         911\\
+Subscription price per issue&         2.8&         2.9&         0.7&         0.7&         4.7&         896\\
+Display ad rate (listed price)&        80.3&        57.7&        72.6&         3.8&       327.2&         688\\
+\textbf{Revenues \& journalists}&            &            &            &            &            &            \\
+Total revenues (million \euro)&         146&          65&         176&           1&        1026&         888\\
+Revenues from advertising (million \euro)&          67&          30&          79&           1&         416&         891\\
+Revenues from sales (million \euro)&          79&          36&         102&           0&         751&         884\\
+Share of advertising in total revenues (\%)&        46.5&        45.9&         8.3&         7.1&        70.4&         878\\
+Number of journalists&          53&          27&          58&           1&         297&         907\\
+\textbf{Circulation}&            &            &            &            &            &            \\
+Total circulation   &     101,487&      50,586&     119,774&       1,480&     654,992&         908\\
+Share of subscribers (\%)&        27.5&        23.3&        22.0&         1.0&       100.1&         909\\
+\textbf{Content}    &            &            &            &            &            &            \\
+Number of pages     &          15&          15&           6&           2&          66&         908\\
+News hole (nonadvertising space)&          12&          12&           4&           2&          34&         908\\
+Advertising space   &           3&           2&           3&           0&          32&         908\\
+\hline\hline
+\end{tabular}
+}
 
 # Data
 
@@ -47,6 +106,56 @@ By investigating the newspapers' contents, Angelucci and Cagé were also able to
 
 Taking information from the Centre d’Etude des Supports de Publicité (CESP), Angelucci and Cagé were able to obtain data on readers' characteristics. The CESP is an organization comprised of the biggest advertising businesses and thye produce reports on newspaper readers every 5 years from 1957 to 1967 and yearly beginning 1968. Data on their survey responses is included for the years 1957, 1962, 1967-1970, 1972, and 1974.
 
+```{r, echo=FALSE}
+
+newspapers <- Micro_dataset
+newspapers <- mutate(newspapers, ra_cst_div_qtotal = ra_cst / qtotal) 
+newspapers <- mutate_at(newspapers, vars(id_news, after_national, local, national), ~as.factor(.))
+newspapers <- mutate(newspapers, year = as.integer(year))
+
+
+# Advertising side
+ad_revenue <- lm(log(ra_cst) ~ after_national + id_news + year, data = newspapers)
+ad_revenue_div_circulation <- lm(log(ra_cst_div_qtotal) ~ after_national + id_news + year, data = newspapers)
+ad_price <- lm(log(ads_p4_cst) ~ after_national + id_news + year, data = newspapers)
+ad_space <- lm(log(ads_s) ~ after_national + id_news + year, data = newspapers)
+
+# Consumer side
+subscription_price <- lm(log(ps_cst) ~ after_national + id_news + year, data = newspapers)
+unit_price <- lm(log(po_cst) ~ after_national + id_news + year, data = newspapers)
+circulation <- lm(log(qtotal) ~ after_national + id_news + year, data = newspapers)
+share_of_sub <- lm(log(qs_s) ~ after_national + id_news + year, data = newspapers)
+revenue_from_sales <- lm(log(rs_cst) ~ after_national + id_news + year, data = newspapers)
+
+omit_me <- c("(Intercept)", "id_news3", "id_news6", "id_news7", "id_news13", 
+             "id_news16", "id_news25", "id_news28", "id_news34", "id_news38", 
+             "id_news44", "id_news48", "id_news51", "id_news53", "id_news54", 
+             "id_news57", "id_news60", "id_news62", "id_news66", "id_news67", 
+             "id_news70", "id_news71", "id_news72", "id_news80", "id_news82", 
+             "id_news88", "id_news95", "id_news97", "id_news98", "id_news103", 
+             "id_news105", "id_news106", "id_news118", "id_news119", "id_news127", 
+             "id_news136", "id_news138", "id_news148", "id_news151", "id_news153", 
+             "id_news154", "id_news157", "id_news158", "id_news161", "id_news163", 
+             "id_news167", "id_news169", "id_news179", "id_news184", "id_news185", 
+             "id_news187", "id_news196", "id_news206", "id_news210", "id_news212", 
+             "id_news213", "id_news224", "id_news225", "id_news234", "id_news236", 
+             "id_news245", "id_news247", "id_news310", "id_news452", "id_news467", 
+             "id_news469", "id_news480", "id_news20040", "id_news20345", 
+             "id_news20346", "id_news20347", "id_news20352", "id_news20354", 
+             "id_news21006", "id_news21025", "id_news21173", "id_news21176", 
+             "id_news33718", "id_news34689", "id_news73")
+
+huxreg("Subscription price" = subscription_price, 
+       "Unit price" = unit_price, 
+       "Circulation" = circulation, 
+       "Share of sub" = share_of_sub,
+       "Revenue from sales" = revenue_from_sales,
+       omit_coefs = omit_me, 
+       number_format = 2
+       )
+```
+
+
 # Model
 
 # Results
@@ -55,9 +164,9 @@ Taking information from the Centre d’Etude des Supports de Publicité (CESP), 
 
 # References
 
-- R Core Team (2020). R: A language and environment for statistical computing. R, Foundation for Statistical Computing, Vienna, Austria. URL, https://www.R-project.org/.
+- R Core Team (2020). R: A language and environment for statistical computing. R, Foundation for Statistical Computing,   Vienna, Austria. URL, https://www.R-project.org/.
 
-- Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+- Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686,    https://doi.org/10.21105/joss.01686
 
 - Hadley Wickham and Evan Miller (2020). haven: Import and Export 'SPSS', 'Stata' and 'SAS' Files. R package
   version 2.3.1. https://CRAN.R-project.org/package=haven
@@ -67,6 +176,11 @@ Taking information from the Centre d’Etude des Supports de Publicité (CESP), 
   
 - H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
 
-- Charles Angelucci and Julia Cagé (2019). Newspapers in Times of Low Advertising Revenues. URL, https://doi.org/10.1257/mic.20170306
+- Charles Angelucci and Julia Cagé (2019). Newspapers in Times of Low Advertising Revenues. URL,   https://doi.org/10.1257/mic.20170306
+
+- Yihui Xie (2016). bookdown: Authoring Books and Technical Documents with R Markdown. Chapman and Hall/CRC.
+  ISBN 978-1138700109
+  
+
 
 
